@@ -101,4 +101,5 @@ public class CadastroFarmacia extends AppCompatActivity {
         setFarmacia(new Farmacia());
     }
 
+
 }

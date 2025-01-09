@@ -35,5 +35,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void buscaFarmacias(View v){
+        Intent i = new Intent(this, BuscaDeFarmacia.class);
+        startActivity(i);
+    }
+
 
 }

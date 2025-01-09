@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import br.edu.ifam.buscamed.model.Farmacia;
+import br.edu.ifam.buscamed.model.Remedio;
 
 public class FarmaciaDAO {
 
@@ -83,6 +84,24 @@ public class FarmaciaDAO {
         if(cursor.moveToFirst()) return true;
 
         return false;
+    }
+
+    @SuppressLint("Range")
+    public List<Farmacia> buscaNome(String nome){
+        List<Farmacia> farmacias = new ArrayList<>();
+        String consulta = "SELECT * FROM farmacia where Lower(nome) = ?";
+        String[] selectionArgs = {nome.toLowerCase(Locale.ROOT)};
+        Cursor cursor = db.rawQuery(consulta, selectionArgs);
+        while (cursor.moveToNext()) {
+            Farmacia farmacia = new Farmacia();
+            farmacia.setId(cursor.getLong(cursor.getColumnIndex("id")));
+            farmacia.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            farmacia.setCnpj(cursor.getString(cursor.getColumnIndex("cnpj")));
+            farmacia.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+            farmacias.add(farmacia);
+        }
+        cursor.close();
+        return farmacias;
     }
 
 }

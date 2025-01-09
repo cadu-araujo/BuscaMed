@@ -104,4 +104,25 @@ public class RemedioDAO {
         cursor.close();
         return remedios;
     }
+
+    @SuppressLint("Range")
+    public List<Remedio> buscaNomeFarmacia(String farmacia){
+        List<Remedio> remedios = new ArrayList<>();
+        String consulta = "SELECT * FROM remedio where Lower(farmacia) = ?";
+        String[] selectionArgs = {farmacia.toLowerCase(Locale.ROOT)};
+        Cursor cursor = db.rawQuery(consulta, selectionArgs);
+        while (cursor.moveToNext()) {
+            Remedio remedio = new Remedio();
+            remedio.setId(cursor.getLong(cursor.getColumnIndex("id")));
+            remedio.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            remedio.setMarca(cursor.getString(cursor.getColumnIndex("marca")));
+            remedio.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+            remedio.setQuantidade(cursor.getInt(cursor.getColumnIndex("quantidade")));
+            remedio.setValor(cursor.getFloat(cursor.getColumnIndex("valor")));
+            remedio.setFarmacia(cursor.getString(cursor.getColumnIndex("farmacia")));
+            remedios.add(remedio);
+        }
+        cursor.close();
+        return remedios;
+    }
 }

@@ -69,7 +69,7 @@ public class CadastroRemedio extends AppCompatActivity {
             }
         });
 
-        //delete e alter
+        //alter
         Intent intent = getIntent();
 
         if(intent.hasExtra("id")){
@@ -99,7 +99,7 @@ public class CadastroRemedio extends AppCompatActivity {
     }
 
     private void setRemedio(Remedio remedio){
-        String preco = String.format(Locale.getDefault(), "%f", remedio.getValor());
+        String preco = String.format(Locale.getDefault(), "%.2f", remedio.getValor());
         String quantidade = String.format(Locale.getDefault(), "%d", remedio.getQuantidade());
         etRemedioNome.setText(remedio.getNome());
         etRemedioDescricao.setText(remedio.getDescricao());
@@ -122,6 +122,12 @@ public class CadastroRemedio extends AppCompatActivity {
                 })
                 .setNegativeButton("Não", (dialog, which) -> {
                 }).show();
+    }
+
+    public void acharFarmacia(View v){
+        Intent intent = new Intent(this, BuscaDeFarmacia.class);
+        intent.putExtra("farmacia", etRemedioFarmacia.getText().toString());
+        startActivity(intent);
     }
 
 }
