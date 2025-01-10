@@ -25,7 +25,7 @@ public class Remedios extends AppCompatActivity {
         setContentView(R.layout.activity_remedios);
 
         remedioDAO = new RemedioDAO(this);
-        recyclerViewRemedio = findViewById(R.id.recyclerViewRemedios);
+        recyclerViewRemedio = findViewById(R.id.recyclerViewRemedio);
         recyclerViewRemedio.setLayoutManager(new LinearLayoutManager(this));
     }
 
