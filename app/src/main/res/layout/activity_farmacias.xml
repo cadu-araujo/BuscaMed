@@ -11,26 +11,59 @@
         android:id="@+id/recyclerViewFarmacia"
         android:layout_width="344dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#0475D1"
+        android:fadingEdge="horizontal"
+        android:padding="10dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/IBaddFarmacia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <ImageButton
         android:id="@+id/IBaddFarmacia"
-        android:layout_width="78dp"
-        android:layout_height="89dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="124dp"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#C8E6C9"
         android:onClick="cadastro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="#0475D1"
+        android:backgroundTint="#0475D1"
+        android:text="Farmácias"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:background="#BBDEFB"
+        android:backgroundTint="#0475D1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,29 +8,57 @@
     tools:context=".Remedios">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewRemedios"
+        android:id="@+id/recyclerViewRemedio"
         android:layout_width="344dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#CC4646"
+        android:padding="10dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/IBaddremedio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <ImageButton
         android:id="@+id/IBaddremedio"
-        android:layout_width="78dp"
-        android:layout_height="89dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="124dp"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#DCEDC8"
         android:onClick="cadastro"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_input_add" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FA99B0"
+        android:backgroundTint="#CC4646"
+        android:text="Remédios"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="44dp" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        android:background="#CC4646"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

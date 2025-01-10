@@ -63,5 +63,4 @@ public class BuscaDeFarmacia extends AppCompatActivity {
         buscaFarmacia.requestFocus();
     }
 
-
 }
