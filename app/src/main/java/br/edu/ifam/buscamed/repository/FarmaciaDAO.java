@@ -89,8 +89,9 @@ public class FarmaciaDAO {
     @SuppressLint("Range")
     public List<Farmacia> buscaNome(String nome){
         List<Farmacia> farmacias = new ArrayList<>();
-        String consulta = "SELECT * FROM farmacia where Lower(nome) = ?";
-        String[] selectionArgs = {nome.toLowerCase(Locale.ROOT)};
+        String consulta = "SELECT * FROM farmacia where Lower(nome) like ?";
+        String[] selectionArgs = {"%" + nome.toLowerCase(Locale.ROOT) + "%"};
+
         Cursor cursor = db.rawQuery(consulta, selectionArgs);
         while (cursor.moveToNext()) {
             Farmacia farmacia = new Farmacia();

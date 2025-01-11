@@ -87,8 +87,8 @@ public class RemedioDAO {
     @SuppressLint("Range")
     public List<Remedio> buscaNome(String nome){
         List<Remedio> remedios = new ArrayList<>();
-        String consulta = "SELECT * FROM remedio where Lower(nome) = ?";
-        String[] selectionArgs = {nome.toLowerCase(Locale.ROOT)};
+        String consulta = "SELECT * FROM remedio where Lower(nome) like ?";
+        String[] selectionArgs = {"%"+nome.toLowerCase(Locale.ROOT)+"%"};
         Cursor cursor = db.rawQuery(consulta, selectionArgs);
         while (cursor.moveToNext()) {
             Remedio remedio = new Remedio();
@@ -108,8 +108,8 @@ public class RemedioDAO {
     @SuppressLint("Range")
     public List<Remedio> buscaNomeFarmacia(String farmacia){
         List<Remedio> remedios = new ArrayList<>();
-        String consulta = "SELECT * FROM remedio where Lower(farmacia) = ?";
-        String[] selectionArgs = {farmacia.toLowerCase(Locale.ROOT)};
+        String consulta = "SELECT * FROM remedio where Lower(farmacia) like ?";
+        String[] selectionArgs = {"%"+farmacia.toLowerCase(Locale.ROOT) +"%"};
         Cursor cursor = db.rawQuery(consulta, selectionArgs);
         while (cursor.moveToNext()) {
             Remedio remedio = new Remedio();
