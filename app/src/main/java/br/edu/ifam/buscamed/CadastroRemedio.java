@@ -106,7 +106,7 @@ public class CadastroRemedio extends AppCompatActivity {
         etRemedioPreco.setText(preco);
         etRemedioQuantidade.setText(quantidade);
         etRemedioMarca.setText(remedio.getMarca());
-        etRemedioFarmacia.setText(remedio.getFarmacia());
+        etRemedioFarmacia.setText(remedio.getFarmacia().toUpperCase());
     }
 
     public void ibClearRemedioOnClick(View v){

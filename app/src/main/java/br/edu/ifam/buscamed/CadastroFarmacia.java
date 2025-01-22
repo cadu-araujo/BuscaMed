@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Locale;
 
+import br.edu.ifam.buscamed.dto.FarmaciaDTO;
+import br.edu.ifam.buscamed.interfaces.FarmaciaAPI;
 import br.edu.ifam.buscamed.model.Farmacia;
 import br.edu.ifam.buscamed.repository.FarmaciaDAO;
 
@@ -29,6 +31,8 @@ public class CadastroFarmacia extends AppCompatActivity {
     private FarmaciaDAO farmaciaDAO;
     private ImageButton ibSaveFarmacia;
     private ImageButton ibDeleteFarmacia;
+    private FarmaciaAPI farmaciaAPI;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class CadastroFarmacia extends AppCompatActivity {
         etFarmaciaEndereco = findViewById(R.id.etFarmaciaEndereco);
         ibSaveFarmacia = findViewById(R.id.ibSaveFarmacia);
         ibDeleteFarmacia = findViewById(R.id.ibExcluirFarmacia);
+        
 
         ibDeleteFarmacia.setVisibility(View.INVISIBLE);
         //Insert
@@ -50,6 +55,7 @@ public class CadastroFarmacia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 farmaciaDAO.insert(getFarmacia());
+                farmaciaAPI.setFarmacia(new FarmaciaDTO(getFarmacia()));
                 Toast.makeText(getApplicationContext(), "Farmacia inserida", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -100,6 +106,7 @@ public class CadastroFarmacia extends AppCompatActivity {
     public void ibClearFarmaciaOnClick(View v){
         setFarmacia(new Farmacia());
     }
+
 
 
 }
