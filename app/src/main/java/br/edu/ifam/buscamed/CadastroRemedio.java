@@ -1,6 +1,9 @@
 package br.edu.ifam.buscamed;
 
+import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,26 +17,43 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
 import java.util.Locale;
 
+import br.edu.ifam.buscamed.dto.FarmaciaDTO;
+import br.edu.ifam.buscamed.dto.RemedioDTO;
+import br.edu.ifam.buscamed.interfaces.FarmaciaAPI;
+import br.edu.ifam.buscamed.interfaces.RemedioAPI;
 import br.edu.ifam.buscamed.model.Farmacia;
 import br.edu.ifam.buscamed.model.Remedio;
 import br.edu.ifam.buscamed.repository.FarmaciaDAO;
 import br.edu.ifam.buscamed.repository.RemedioDAO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CadastroRemedio extends AppCompatActivity {
 
     private Long id;
     private ImageButton ibSaveRemedio;
     private ImageButton ibDeleteRemedio;
+
     private EditText etRemedioNome;
     private EditText etRemedioMarca;
     private EditText etRemedioQuantidade;
     private EditText etRemedioDescricao;
     private EditText etRemedioPreco;
     private EditText etRemedioFarmacia;
-    private RemedioDAO remedioDAO;
-    private FarmaciaDAO farmaciaDAO;
+
+    private String nome;
+    private long loginID;
+
+    private RemedioAPI remedioAPI;
+
+    private Farmacia farmacia;
+    private FarmaciaAPI farmaciaAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +61,12 @@ public class CadastroRemedio extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cadastro_remedio);
 
-        remedioDAO = new RemedioDAO(this);
-        farmaciaDAO = new FarmaciaDAO(this);
+
+        acessarAPI();
+
+        Intent i = getIntent();
+        nome = i.getStringExtra("nome");
+
         ibSaveRemedio = findViewById(R.id.ibSaveRemedio);
         ibDeleteRemedio = findViewById(R.id.ibExcluirRemedio);
         etRemedioDescricao = findViewById(R.id.etRemedioDescricao);
@@ -52,47 +76,61 @@ public class CadastroRemedio extends AppCompatActivity {
         etRemedioQuantidade = findViewById(R.id.etRemedioQuantidade);
         etRemedioFarmacia = findViewById(R.id.etRemedioFarmacia);
 
+
+        etRemedioFarmacia.setText(nome);
+
         ibDeleteRemedio.setVisibility(View.INVISIBLE);
 
-        //insert
         ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(farmaciaDAO.farmaciaExiste(etRemedioFarmacia.getText().toString())){
-                    remedioDAO.insert(getRemedio());
-                    Toast.makeText(getApplicationContext(), "Remédio inserido", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Farmácia não existe", Toast.LENGTH_SHORT).show();
-                    setRemedio(new Remedio());
+                try {
+                    inserirRemedio(new RemedioDTO(getEditRemedio()));
+                } catch (RuntimeException e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        //alter
         Intent intent = getIntent();
 
         if(intent.hasExtra("id")){
             ibDeleteRemedio.setVisibility(View.VISIBLE);
             id = intent.getLongExtra("id", 0);
-            setRemedio(remedioDAO.getRemedioByID(id));
+            getRemedio(id);
             ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    remedioDAO.update(id, getRemedio());
-                    Toast.makeText(getApplicationContext(), "Remédio alterado", Toast.LENGTH_SHORT).show();
-                    finish();
+                    try {
+                        atualizarRemedio(id, new RemedioDTO(getEditRemedio()));
+                        finish();
+                    } catch (RuntimeException e) {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
     }
 
-    private Remedio getRemedio(){
+    private void acessarAPI() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        remedioAPI = retrofit.create(RemedioAPI.class);
+    }
+
+    private Remedio getEditRemedio(){
         Remedio remedio = new Remedio();
         remedio.setNome(etRemedioNome.getText().toString());
         remedio.setDescricao(etRemedioDescricao.getText().toString());
         remedio.setMarca(etRemedioMarca.getText().toString());
-        remedio.setValor(Float.parseFloat(etRemedioPreco.getText().toString()));
+        try {
+            remedio.setValor(Float.parseFloat(etRemedioPreco.getText().toString().replace(",", ".")));
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        }
+
         remedio.setQuantidade(Integer.parseInt(etRemedioQuantidade.getText().toString()));
         remedio.setFarmacia(etRemedioFarmacia.getText().toString());
         return remedio;
@@ -106,7 +144,7 @@ public class CadastroRemedio extends AppCompatActivity {
         etRemedioPreco.setText(preco);
         etRemedioQuantidade.setText(quantidade);
         etRemedioMarca.setText(remedio.getMarca());
-        etRemedioFarmacia.setText(remedio.getFarmacia().toUpperCase());
+        etRemedioFarmacia.setText(farmacia.getNome().toUpperCase());
     }
 
     public void ibClearRemedioOnClick(View v){
@@ -116,7 +154,7 @@ public class CadastroRemedio extends AppCompatActivity {
     public void ibDeleteRemedioOnClick(View v){
         new AlertDialog.Builder(this).setTitle("Confirmação").setMessage("Tem certeza que deseja deletar este remédio?")
                 .setPositiveButton("Sim", (dialog, which) -> {
-                    remedioDAO.delete(id);
+                    deleteRemedio(id);
                     finish();
                     Toast.makeText(this, "Ação confirmada!", Toast.LENGTH_SHORT).show();
                 })
@@ -129,5 +167,94 @@ public class CadastroRemedio extends AppCompatActivity {
         intent.putExtra("farmacia", etRemedioFarmacia.getText().toString());
         startActivity(intent);
     }
+
+    private void getRemedio(Long id) {
+        Call<RemedioDTO> call = remedioAPI.getRemedio(id);
+
+        call.enqueue(new Callback<RemedioDTO>() {
+            @Override
+            public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    RemedioDTO remedioDTO = response.body();
+                    setRemedio(remedioDTO.getRemedio());
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemedioDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void deleteRemedio(Long id) {
+        Call<RemedioDTO> call = remedioAPI.deleteRemedio(id);
+
+        call.enqueue(new Callback<RemedioDTO>() {
+            @Override
+            public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    Toast.makeText(getApplicationContext(), "Remédio excluído com sucesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemedioDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void inserirRemedio(RemedioDTO remedioDTO){
+        Call<RemedioDTO> call = remedioAPI.setRemedio(remedioDTO);
+        call.enqueue(new Callback<RemedioDTO>() {
+            @Override
+            public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(getApplicationContext(), "Remédio inserido com sucesso", Toast.LENGTH_SHORT).show();
+                } else {
+                    String codigo = "Erro: " + response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemedioDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void atualizarRemedio(Long id, RemedioDTO remedioDTO) {
+        Call<RemedioDTO> call = remedioAPI.updateRemedio(id, remedioDTO);
+
+        call.enqueue(new Callback<RemedioDTO>() {
+            @Override
+            public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    Toast.makeText(getApplicationContext(), "Remédio atualizado com sucesso", Toast.LENGTH_SHORT).show();
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RemedioDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
 }

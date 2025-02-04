@@ -1,5 +1,7 @@
 package br.edu.ifam.buscamed;
 
+import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +33,7 @@ public class Farmacias extends AppCompatActivity {
     private RecyclerView recyclerViewFarmacia;
     private FarmaciaAdapter farmaciaAdapter;
     private FarmaciaDAO farmaciaDAO;
+
     private FarmaciaAPI farmaciaAPI;
     private ProgressBar pbFarmacias;
 
@@ -60,7 +63,7 @@ public class Farmacias extends AppCompatActivity {
 
     private void acessarAPI(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.100.10:8080/api/")
+                .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         farmaciaAPI = retrofit.create(FarmaciaAPI.class);
@@ -90,6 +93,7 @@ public class Farmacias extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<FarmaciaDTO>> call, Throwable t) {
                 String failureMessage = "Falha de acesso"+t.getMessage();
+                System.out.println("Falha de acesso"+t.getMessage());
                 Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
                 pbFarmacias.setVisibility(View.INVISIBLE);
             }

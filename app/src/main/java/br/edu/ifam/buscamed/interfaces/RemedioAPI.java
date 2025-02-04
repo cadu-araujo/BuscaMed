@@ -14,18 +14,24 @@ import retrofit2.http.Path;
 
 public interface RemedioAPI {
 
-    @GET("/farmacia")
+    @GET("api/remedio")
     Call<List<RemedioDTO>> getRemedio();
 
-    @GET("/farmacia/{id}")
+    @GET("api/remedio/{id}")
     Call<RemedioDTO> getRemedio(@Path("id") Long id);
 
-    @POST("/farmacia")
+    @GET("api/remedio/name/{nome}")
+    Call<List<RemedioDTO>> getRemedioByNome(@Path("nome") String nome);
+
+    @GET("api/remedio/farmacia/{id}")
+    Call<List<RemedioDTO>> getRemedioByFarmacia(@Path("id") Long id);
+
+    @POST("api/remedio")
     Call<RemedioDTO> setRemedio(@Body RemedioDTO remedioDTO);
 
-    @PUT("/farmacia/{id}")
+    @PUT("api/remedio/{id}")
     Call<RemedioDTO> updateRemedio(@Path("id") Long id, @Body RemedioDTO remedioDTO);
 
-    @DELETE("/farmacia/{id}")
+    @DELETE("api/remedio/{id}")
     Call<RemedioDTO> deleteRemedio(@Path("id") Long id);
 }

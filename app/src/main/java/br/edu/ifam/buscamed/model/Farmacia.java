@@ -5,14 +5,18 @@ public class Farmacia {
     private String nome;
     private String cnpj;
     private String endereco;
+    private String email;
+    private Long login;
 
     public Farmacia() {}
 
-    public Farmacia(String cnpj, String endereco, Long id, String nome) {
+    public Farmacia(String cnpj, String endereco, String email, Long id, String nome, Long login) {
         this.cnpj = cnpj;
         this.endereco = endereco;
+        this.email = email;
         this.id = id;
         this.nome = nome;
+        this.login = login;
     }
 
     public String getCnpj() {
@@ -31,6 +35,14 @@ public class Farmacia {
         this.endereco = endereco;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
@@ -45,5 +57,13 @@ public class Farmacia {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Long getLogin() {
+        return login;
+    }
+
+    public void setLogin(Long login) {
+        this.login = login;
     }
 }

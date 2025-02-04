@@ -43,6 +43,7 @@ public class FarmaciaAdapter extends RecyclerView.Adapter<FarmaciaAdapter.Farmac
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CadastroFarmacia.class);
             intent.putExtra("id", farmacia.getId());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });
     }

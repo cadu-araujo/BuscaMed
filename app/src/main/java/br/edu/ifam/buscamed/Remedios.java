@@ -1,6 +1,9 @@
 package br.edu.ifam.buscamed;
 
+import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -32,9 +35,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Remedios extends AppCompatActivity {
     private RecyclerView recyclerViewRemedio;
     private RemedioAdapter remedioAdapter;
-    private RemedioDAO remedioDAO;
     private ProgressBar pbRemedios;
     private RemedioAPI remedioAPI;
+
+    private FarmaciaAPI farmaciaAPI;
+    private Long farmaciaID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,33 +47,37 @@ public class Remedios extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_remedios);
 
-        remedioDAO = new RemedioDAO(this);
         recyclerViewRemedio = findViewById(R.id.recyclerViewRemedio);
+        recyclerViewRemedio.setLayoutManager(new LinearLayoutManager(this));
         pbRemedios = findViewById(R.id.pbRemedios);
+        acessarAPI();
+
+        SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
+        farmaciaID = getIntent().getLongExtra("idFarmacia", 0);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        remedioAdapter = new RemedioAdapter( this, remedioDAO.getRemedio());
-        recyclerViewRemedio.setAdapter(remedioAdapter);
+        getRemedios();
     }
 
     public void cadastro(View v){
         Intent i = new Intent(this, CadastroRemedio.class);
+        i.putExtra("nome", getIntent().getStringExtra("nome"));
         startActivity(i);
     }
 
     private void acessarAPI(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("10.100.81.205:8080/api/")
+                .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         remedioAPI = retrofit.create(RemedioAPI.class);
     }
 
     private void getRemedios() {
-        Call<List<RemedioDTO>> call = remedioAPI.getRemedio();
+        Call<List<RemedioDTO>> call = remedioAPI.getRemedioByFarmacia(farmaciaID);
         pbRemedios.setVisibility(View.VISIBLE);
 
         call.enqueue(new Callback<List<RemedioDTO>>() {
@@ -96,4 +105,6 @@ public class Remedios extends AppCompatActivity {
             }
         });
     }
+
+
 }

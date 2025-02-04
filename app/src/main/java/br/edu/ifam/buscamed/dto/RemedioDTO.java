@@ -80,7 +80,7 @@ public class RemedioDTO {
     }
 
     public Remedio getRemedio(){
-        return new Remedio(descricao, farmacia,id,marca,nome,quantidade,valor);
+        return new Remedio(descricao,farmacia,id,marca, nome,quantidade,valor);
     }
 
 

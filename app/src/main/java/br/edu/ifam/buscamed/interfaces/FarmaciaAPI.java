@@ -13,18 +13,24 @@ import retrofit2.http.Path;
 
 public interface FarmaciaAPI {
 
-    @GET("farmacia")
+    @GET("api/farmacia")
     Call<List<FarmaciaDTO>> getFarmacia();
 
-    @GET("farmacia/{id}")
+    @GET("api/farmacia/login/{id}")
+    Call<FarmaciaDTO> getFarmaciaLogin(@Path("id") Long id);
+
+    @GET("api/farmacia/{id}")
     Call<FarmaciaDTO> getFarmacia(@Path("id") Long id);
 
-    @POST("farmacia")
+    @GET("api/farmacia/name/{nome}")
+    Call<List<FarmaciaDTO>> getFarmaciaByNome(@Path("nome") String nome);
+
+    @POST("api/farmacia")
     Call<FarmaciaDTO> setFarmacia(@Body FarmaciaDTO farmaciaDTO);
 
-    @PUT("farmacia/{id}")
+    @PUT("api/farmacia/{id}")
     Call<FarmaciaDTO> updateFarmacia(@Path("id") Long id, @Body FarmaciaDTO farmaciaDTO);
 
-    @DELETE("farmacia/{id}")
+    @DELETE("api/farmacia/{id}")
     Call<FarmaciaDTO> deleteFarmacia(@Path("id") Long id);
 }
