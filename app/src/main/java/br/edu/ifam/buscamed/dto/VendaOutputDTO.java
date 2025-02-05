@@ -1,22 +1,22 @@
 package br.edu.ifam.buscamed.dto;
 
 public class VendaOutputDTO {
-    private String nome, telefone, remedio, situacao, farmacia;
+    private String usuario, telefone, remedio, concluida, farmacia;
     private int quantidade;
 
     public VendaOutputDTO() {}
 
     public VendaOutputDTO(String nome, int quantidade, String remedio, String situacao, String telefone, String farmacia) {
-        this.nome = nome;
+        this.usuario = nome;
         this.farmacia = farmacia;
         this.quantidade = quantidade;
         this.remedio = remedio;
-        this.situacao = situacao;
+        this.concluida = situacao;
         this.telefone = telefone;
     }
 
-    public String getNome() {
-        return nome;
+    public String getUsuario() {
+        return usuario;
     }
 
     public String getFarmacia() {
@@ -27,8 +27,8 @@ public class VendaOutputDTO {
         this.farmacia = farmacia;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public int getQuantidade() {
@@ -47,12 +47,12 @@ public class VendaOutputDTO {
         this.remedio = remedio;
     }
 
-    public String getSituacao() {
-        return situacao;
+    public String getConcluida() {
+        return concluida;
     }
 
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
+    public void setConcluida(String concluida) {
+        this.concluida = concluida;
     }
 
     public String getTelefone() {

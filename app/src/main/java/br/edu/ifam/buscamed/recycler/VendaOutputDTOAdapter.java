@@ -13,10 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import br.edu.ifam.buscamed.CadastroPedido;
-import br.edu.ifam.buscamed.CadastroRemedio;
 import br.edu.ifam.buscamed.R;
 import br.edu.ifam.buscamed.dto.VendaOutputDTO;
-import br.edu.ifam.buscamed.model.Remedio;
 
 public class VendaOutputDTOAdapter extends RecyclerView.Adapter<VendaOutputDTOAdapter.VendaViewHolder>{
     private Context context;
@@ -37,9 +35,9 @@ public class VendaOutputDTOAdapter extends RecyclerView.Adapter<VendaOutputDTOAd
     @Override
     public void onBindViewHolder(@NonNull VendaViewHolder holder, int position) {
         VendaOutputDTO vendaOutputDTO = vendasList.get(position);
-        holder.tvSituacao.setText(vendaOutputDTO.getSituacao());
+        holder.tvSituacao.setText(vendaOutputDTO.getConcluida());
         holder.tvRemedio.setText(vendaOutputDTO.getRemedio());
-        holder.tvCliente.setText(vendaOutputDTO.getNome());
+        holder.tvCliente.setText(vendaOutputDTO.getUsuario());
         holder.tvQuantidade.setText(String.valueOf(vendaOutputDTO.getQuantidade()));
         holder.tvTelefone.setText(vendaOutputDTO.getTelefone());
         holder.tvFarmacia.setText(vendaOutputDTO.getFarmacia());

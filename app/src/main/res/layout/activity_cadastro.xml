@@ -111,7 +111,7 @@
             android:id="@+id/nomeUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Seu nome aqui"
+            android:hint="Seu usuario aqui"
             android:inputType="text" />
 
         <TextView

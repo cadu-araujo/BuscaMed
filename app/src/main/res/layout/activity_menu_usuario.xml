@@ -30,6 +30,7 @@
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="60dp"
         android:background="@drawable/round_corners"
         android:backgroundTint="#00BF63"
@@ -37,7 +38,9 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/ic_medication" />
 
@@ -45,6 +48,7 @@
         android:id="@+id/imageButton2"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
@@ -53,10 +57,11 @@
         android:onClick="buscaFarmacias"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.492"
+        app:layout_constraintVertical_bias="0.502"
         app:srcCompat="@drawable/ic_store_search" />
 
     <ImageButton
@@ -85,6 +90,7 @@
         android:onClick="mudarUsuario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageButton3"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageButton2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@android:drawable/ic_menu_edit" />
@@ -97,5 +103,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#FF9800"
+        android:onClick="meusPedidos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.506"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
