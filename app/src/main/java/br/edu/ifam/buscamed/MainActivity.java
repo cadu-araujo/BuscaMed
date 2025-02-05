@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         ibLogar = findViewById(R.id.ibLogar);
         ibCadastro = findViewById(R.id.ibCadastro);
-        etUsuarioEmail = findViewById(R.id.etUsuarioEmail);
+        etUsuarioEmail = findViewById(R.id.etUsuarioNome);
         etUsuarioSenha = findViewById(R.id.etUsuarioSenha);
 
         ibCadastro.setOnClickListener(new View.OnClickListener() {

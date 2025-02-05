@@ -31,7 +31,6 @@ public class MenuUsuario extends AppCompatActivity {
 
     private UsuarioAPI usuarioAPI;
     private TextView nome;
-
     private Usuario user;
 
     @Override
@@ -94,6 +93,12 @@ public class MenuUsuario extends AppCompatActivity {
             public void onResponse(Call<UsuarioDTO> call, Response<UsuarioDTO> response) {
                 if(response.isSuccessful() && response.body()!=null){
                     user = response.body().getUsuario();
+
+                    SharedPreferences userI = getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = userI.edit();
+                    editor.putLong("IDUser", user.getId());
+                    editor.apply();
+
                     nome.setText("Bem vindo(a),  "+user.getNome()+"!");
                 }else{
                     String codigo = "Erro: "+response.code();
@@ -115,4 +120,11 @@ public class MenuUsuario extends AppCompatActivity {
         i.putExtra("id", user.getId());
         startActivity(i);
     }
+
+    public void meusPedidos(View v){
+        Intent i = new Intent(this, Pedidos.class);
+        i.putExtra("id", user.getId());
+        startActivity(i);
+    }
+
 }

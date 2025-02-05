@@ -23,18 +23,20 @@ public class Verifica extends AppCompatActivity {
         String userType = preferences.getString("userType", "");
 
 
-        Intent intent = new Intent();
+        Intent intent;
         if (isLoggedIn) {
             if ("farmacia".equals(userType)) {
                 intent = new Intent(this, MenuFarmacia.class);
             } else if ("user".equals(userType)) {
                 intent = new Intent(this, MenuUsuario.class);
+            } else {
+                intent = new Intent(this, MainActivity.class);
             }
         } else {
             intent = new Intent(this, MainActivity.class);
         }
-
         startActivity(intent);
         finish();
     }
-}
+
+    }

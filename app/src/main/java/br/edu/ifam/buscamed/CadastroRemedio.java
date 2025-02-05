@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -37,23 +38,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CadastroRemedio extends AppCompatActivity {
 
     private Long id;
-    private ImageButton ibSaveRemedio;
-    private ImageButton ibDeleteRemedio;
+    private ImageButton ibSaveRemedio,ibDeleteRemedio, clear, comprar;
 
-    private EditText etRemedioNome;
-    private EditText etRemedioMarca;
-    private EditText etRemedioQuantidade;
-    private EditText etRemedioDescricao;
-    private EditText etRemedioPreco;
-    private EditText etRemedioFarmacia;
-
+    private TextView titulo;
+    private EditText etRemedioNome, etRemedioMarca, etRemedioQuantidade, etRemedioDescricao, etRemedioPreco, etRemedioFarmacia;
     private String nome;
-    private long loginID;
+    private long userID;
 
     private RemedioAPI remedioAPI;
 
-    private Farmacia farmacia;
-    private FarmaciaAPI farmaciaAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +56,13 @@ public class CadastroRemedio extends AppCompatActivity {
 
 
         acessarAPI();
+        SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
+        Intent intent = getIntent();
+        id = intent.getLongExtra("id", 0);
+        getRemedio(id);
 
-        Intent i = getIntent();
-        nome = i.getStringExtra("nome");
-
+        titulo = findViewById(R.id.tvTituloRemedio);
+        clear = findViewById(R.id.ibLimparRemedio);
         ibSaveRemedio = findViewById(R.id.ibSaveRemedio);
         ibDeleteRemedio = findViewById(R.id.ibExcluirRemedio);
         etRemedioDescricao = findViewById(R.id.etRemedioDescricao);
@@ -75,41 +71,43 @@ public class CadastroRemedio extends AppCompatActivity {
         etRemedioMarca = findViewById(R.id.etRemedioMarca);
         etRemedioQuantidade = findViewById(R.id.etRemedioQuantidade);
         etRemedioFarmacia = findViewById(R.id.etRemedioFarmacia);
+        comprar = findViewById(R.id.ibPEDIR);
 
-
+        comprar.setVisibility(View.INVISIBLE);
         etRemedioFarmacia.setText(nome);
 
-        ibDeleteRemedio.setVisibility(View.INVISIBLE);
 
-        ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    inserirRemedio(new RemedioDTO(getEditRemedio()));
-                } catch (RuntimeException e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        Intent intent = getIntent();
-
-        if(intent.hasExtra("id")){
+        if(preferences.getString("userType", "").equals("user")){
+            ibSaveRemedio.setVisibility(View.INVISIBLE);
+            ibDeleteRemedio.setVisibility(View.INVISIBLE);
+            clear.setVisibility(View.INVISIBLE);
+            comprar.setVisibility(View.VISIBLE);
+            titulo.setText("Detalhes do remédio");
+        } else if(!preferences.getString("userType", "").equals("user") && intent.hasExtra("nomeFarmacia")){
             ibDeleteRemedio.setVisibility(View.VISIBLE);
-            id = intent.getLongExtra("id", 0);
-            getRemedio(id);
+            ibSaveRemedio.setVisibility(View.VISIBLE);
+            etRemedioFarmacia.setText(intent.getStringExtra("nomeFarmacia"));
             ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        atualizarRemedio(id, new RemedioDTO(getEditRemedio()));
-                        finish();
-                    } catch (RuntimeException e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                    inserirRemedio(new RemedioDTO(getEditRemedio()));
+                }
+            });
+        }else{
+            ibDeleteRemedio.setVisibility(View.VISIBLE);
+            ibSaveRemedio.setVisibility(View.VISIBLE);
+            clear.setVisibility(View.INVISIBLE);
+            titulo.setText("Edição de remédio");
+            ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    atualizarRemedio(id, new RemedioDTO(getEditRemedio()));
                 }
             });
         }
+
+
     }
 
     private void acessarAPI() {
@@ -144,7 +142,7 @@ public class CadastroRemedio extends AppCompatActivity {
         etRemedioPreco.setText(preco);
         etRemedioQuantidade.setText(quantidade);
         etRemedioMarca.setText(remedio.getMarca());
-        etRemedioFarmacia.setText(farmacia.getNome().toUpperCase());
+        etRemedioFarmacia.setText(nome);
     }
 
     public void ibClearRemedioOnClick(View v){
@@ -176,10 +174,8 @@ public class CadastroRemedio extends AppCompatActivity {
             public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
                 if(response.isSuccessful() && response.body()!=null){
                     RemedioDTO remedioDTO = response.body();
-                    setRemedio(remedioDTO.getRemedio());
-                }else{
-                    String codigo = "Erro: "+response.code();
-                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                    nome = remedioDTO.getFarmacia();
+                    setRemedio(remedioDTO .getRemedio());
                 }
             }
 
@@ -220,6 +216,7 @@ public class CadastroRemedio extends AppCompatActivity {
             public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(getApplicationContext(), "Remédio inserido com sucesso", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     String codigo = "Erro: " + response.code();
                     Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
@@ -242,6 +239,7 @@ public class CadastroRemedio extends AppCompatActivity {
             public void onResponse(Call<RemedioDTO> call, Response<RemedioDTO> response) {
                 if(response.isSuccessful() && response.body()!=null){
                     Toast.makeText(getApplicationContext(), "Remédio atualizado com sucesso", Toast.LENGTH_SHORT).show();
+                    finish();
                 }else{
                     String codigo = "Erro: "+response.code();
                     Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
@@ -256,5 +254,10 @@ public class CadastroRemedio extends AppCompatActivity {
         });
     }
 
+    public void realizarPedido(View v){
+        Intent pedir = new Intent(getApplicationContext(), CadastroPedido.class);
+        pedir.putExtra("idRemedio", id);
+        startActivity(pedir);
+    }
 
 }

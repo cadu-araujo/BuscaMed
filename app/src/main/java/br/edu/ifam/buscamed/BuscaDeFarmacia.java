@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -68,8 +70,8 @@ public class BuscaDeFarmacia extends AppCompatActivity {
 
         if(intent.hasExtra("farmacia")){
             String farmacia = intent.getStringExtra("farmacia");
-            farmaciaAdapter = new FarmaciaAdapter( this, farmaciaDAO.buscaNome(farmacia));
-            recyclerBusca.setAdapter(farmaciaAdapter);
+            buscaFarmacia.setText(farmacia);
+            buscar();
         }
 
     }
@@ -82,7 +84,11 @@ public class BuscaDeFarmacia extends AppCompatActivity {
         farmaciaAPI = retrofit.create(FarmaciaAPI.class);
     }
 
-    public void buscar(View v){
+    public void buscarClick(View v){
+        buscar();
+    }
+
+    public void buscar(){
         Call<List<FarmaciaDTO>> call = farmaciaAPI.getFarmaciaByNome(buscaFarmacia.getText().toString());
 
         call.enqueue(new Callback<List<FarmaciaDTO>>() {
@@ -114,6 +120,10 @@ public class BuscaDeFarmacia extends AppCompatActivity {
 
     public void redirecionar(View v){
         buscaFarmacia.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(buscaFarmacia, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
 }

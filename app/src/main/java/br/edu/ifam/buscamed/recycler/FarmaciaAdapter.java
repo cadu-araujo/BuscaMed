@@ -39,13 +39,12 @@ public class FarmaciaAdapter extends RecyclerView.Adapter<FarmaciaAdapter.Farmac
         holder.tvCNPJ.setText(farmacia.getCnpj());
         holder.tvEndereco.setText(farmacia.getEndereco());
 
-        //View que representa o fornecedorviewholder
-        holder.itemView.setOnClickListener(v -> {
+        /*holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CadastroFarmacia.class);
             intent.putExtra("id", farmacia.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        });
+        });*/
     }
 
     @Override

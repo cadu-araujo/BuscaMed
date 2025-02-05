@@ -3,8 +3,10 @@ package br.edu.ifam.buscamed;
 import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,6 +49,7 @@ public class BuscaDeRemedio extends AppCompatActivity {
     private ImageButton svBusca;
     private Button btBuscar;
 
+    private Context context;
 
     private RemedioAPI remedioAPI;
 
@@ -56,6 +59,7 @@ public class BuscaDeRemedio extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_busca_de_remedio);
 
+        context = getApplicationContext();
         btBuscar = findViewById(R.id.btPesquisar);
         svBusca = findViewById(R.id.ibSearch);
         buscaRemedio = findViewById(R.id.etBuscaRemedio);
@@ -76,9 +80,6 @@ public class BuscaDeRemedio extends AppCompatActivity {
     }
 
     public void buscar(View v){
-        remedioAdapter = new RemedioAdapter( this, remedioDAO.buscaNome(buscaRemedio.getText().toString()));
-        recyclerBusca.setAdapter(remedioAdapter);
-
         Call<List<RemedioDTO>> call = remedioAPI.getRemedioByNome(buscaRemedio.getText().toString());
 
 
@@ -93,13 +94,11 @@ public class BuscaDeRemedio extends AppCompatActivity {
                         remedioList.add(remedioDTO.getRemedio());
                     }
 
-                    remedioAdapter = new RemedioAdapter(getApplicationContext(), remedioList);
+                    remedioAdapter = new RemedioAdapter(context, remedioList);
                     recyclerBusca.setAdapter(remedioAdapter);
-                    //pbRemedios.setVisibility(View.INVISIBLE);
                 }else{
                     String codigo = "Erro: "+response.code();
                     Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
-                    //pbRemedios.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -107,13 +106,16 @@ public class BuscaDeRemedio extends AppCompatActivity {
             public void onFailure(Call<List<RemedioDTO>> call, Throwable t) {
                 String failureMessage = "Falha de acesso"+t.getMessage();
                 Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
-                //pbRemedios.setVisibility(View.INVISIBLE);
             }
         });
     }
 
     public void redirecionar(View v){
         buscaRemedio.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(buscaRemedio, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
 }

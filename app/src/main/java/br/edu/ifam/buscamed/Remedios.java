@@ -64,7 +64,7 @@ public class Remedios extends AppCompatActivity {
 
     public void cadastro(View v){
         Intent i = new Intent(this, CadastroRemedio.class);
-        i.putExtra("nome", getIntent().getStringExtra("nome"));
+        i.putExtra("nomeFarmacia", getIntent().getStringExtra("nome"));
         startActivity(i);
     }
 
@@ -89,8 +89,12 @@ public class Remedios extends AppCompatActivity {
                     for(RemedioDTO remedioDTO:remediosDTO)
                         remedios.add(remedioDTO.getRemedio());
                 }else{
-                    String codigo = "Erro: "+response.code();
-                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                    if(response.code() == 204){
+                        Toast.makeText(getApplicationContext(), "Sem remédios Cadastrados", Toast.LENGTH_SHORT).show();
+                    }else{
+                        String codigo = "Erro: "+response.code();
+                        Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 remedioAdapter = new RemedioAdapter(getApplicationContext(), remedios);
                 recyclerViewRemedio.setAdapter(remedioAdapter);

@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloRemedio" />
 
     <EditText
         android:id="@+id/etRemedioMarca"
@@ -98,7 +98,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etRemedioPreco"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:focusable="false"
+        android:clickable="false"/>
 
     <ImageButton
         android:id="@+id/ibSaveRemedio"
@@ -158,7 +160,7 @@
         app:srcCompat="@android:drawable/ic_input_delete" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tvTituloRemedio"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginTop="44dp"
@@ -181,11 +183,25 @@
         android:layout_height="46dp"
         android:background="#EB6161"
         android:backgroundTint="#d12424"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/tvTituloRemedio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibPEDIR"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#034661"
+        android:onClick="realizarPedido"
+        app:layout_constraintBottom_toTopOf="@+id/ibExcluirRemedio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etRemedioFarmacia"
+        app:srcCompat="@android:drawable/ic_menu_today" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
