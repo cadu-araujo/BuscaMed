@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -33,15 +34,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CadastroFarmacia extends AppCompatActivity {
 
-    private EditText etFarmaciaNome;
-    private EditText etFarmaciaCNPJ;
-    private EditText etFarmaciaEndereco;
-
+    private EditText etFarmaciaNome, etFarmaciaCNPJ, etFarmaciaEndereco;
     private long id, idFarmacia;
     private FarmaciaDAO farmaciaDAO;
-    private ImageButton ibSaveFarmacia;
-    private ImageButton ibDeleteFarmacia;
+    private ImageButton ibSaveFarmacia, ibDeleteFarmacia;
     private FarmaciaAPI farmaciaAPI;
+    private TextView titulo;
 
 
     @Override
@@ -51,6 +49,7 @@ public class CadastroFarmacia extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro_farmacia);
 
         acessarAPI();
+        titulo = findViewById(R.id.tvCadastroFarmacia);
         farmaciaDAO = new FarmaciaDAO(this);
         etFarmaciaNome = findViewById(R.id.etFarmaciaNome);
         etFarmaciaCNPJ = findViewById(R.id.etFarmaciaCNPJ);
@@ -60,6 +59,7 @@ public class CadastroFarmacia extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent.hasExtra("id")){
+            titulo.setText("Edição de Farmácia");
             id = intent.getLongExtra("id", 0);
             getFarmacia(id);
         }

@@ -46,6 +46,7 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.RemedioV
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CadastroRemedio.class);
             intent.putExtra("id", remedio.getId());
+            intent.putExtra("nome", remedio.getFarmacia());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         });

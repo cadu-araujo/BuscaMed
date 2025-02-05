@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/tvCadastroFarmacia">
         <RadioButton
             android:id="@+id/rbUsuario"
             android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tvCadastroFarmacia"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_menu_save" />
 
@@ -62,12 +62,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ibSaveUsuario"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tvCadastroFarmacia"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_input_delete" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvCadastroFarmacia"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Sua senha aqui"
-            android:inputType="textPassword" />
+            android:inputType="numberPassword" />
     </LinearLayout>
 
     <LinearLayout
@@ -240,7 +240,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Senha da farmácia"
-            android:inputType="textPassword" />
+            android:inputType="numberPassword" />
 
         <TextView
             android:layout_width="wrap_content"

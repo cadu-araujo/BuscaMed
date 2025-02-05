@@ -75,6 +75,12 @@ public class MenuFarmacia extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void meusPedidos(View v){
+        Intent i = new Intent(this, Pedidos.class);
+        i.putExtra("id", farmacia.getId());
+        startActivity(i);
+    }
+
     public void home(View v){
         new AlertDialog.Builder(this).setTitle("Confirmação").setMessage("Tem certeza que deseja voltar ao Login?")
                 .setPositiveButton("Sim", (dialog, which) -> {
