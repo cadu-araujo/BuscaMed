@@ -67,6 +67,7 @@ public class CadastroPedido extends AppCompatActivity {
 
     public VendaInputDTO getVendaDTO(){
         VendaInputDTO vendaDTO = new VendaInputDTO();
+        vendaDTO.setQuantidade(Integer.parseInt(quantidade.getText().toString()));
         vendaDTO.setRemedioId(idremedio);
         vendaDTO.setConcluida("Em andamento");
         vendaDTO.setUsuarioId(idUser);

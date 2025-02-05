@@ -4,11 +4,21 @@ public class VendaInputDTO {
 
     private Long usuarioId, remedioId;
     private String concluida;
+    private int quantidade;
 
     public VendaInputDTO() {
     }
 
-    public VendaInputDTO(Long remedio, String situacao, Long usuario) {
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public VendaInputDTO(Long remedio, String situacao, Long usuario, int quantidade) {
+        this.quantidade = quantidade;
         this.remedioId = remedio;
         this.concluida = situacao;
         this.usuarioId = usuario;
