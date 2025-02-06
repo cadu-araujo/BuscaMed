@@ -16,6 +16,10 @@ public interface VendaAPI {
     @GET("api/venda/farmacia/{id}")
     Call<List<VendaOutputDTO>> getVendaFarmacia(@Path("id") Long id);
 
+
+    @GET("api/venda/{id}")
+    Call<VendaInputDTO> getVendaById(@Path("id") Long id);
+
     @GET("api/venda/user/{id}")
     Call<List<VendaOutputDTO>> getVendaUser(@Path("id") Long id);
 
@@ -23,6 +27,6 @@ public interface VendaAPI {
     Call<VendaInputDTO> setVenda(@Body VendaInputDTO vendaDTO);
 
     @PUT("api/venda/{id}")
-    Call<VendaOutputDTO> updateVenda(@Path("id") Long id, @Body VendaInputDTO vendaDTO);
+    Call<VendaOutputDTO> updateVenda(@Path("id") Long id, @Body VendaInputDTO vendaInputDTO);
 
 }

@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -16,9 +18,12 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import br.edu.ifam.buscamed.dto.RemedioDTO;
 import br.edu.ifam.buscamed.dto.UsuarioDTO;
 import br.edu.ifam.buscamed.dto.VendaInputDTO;
+import br.edu.ifam.buscamed.dto.VendaOutputDTO;
 import br.edu.ifam.buscamed.interfaces.RemedioAPI;
 import br.edu.ifam.buscamed.interfaces.UsuarioAPI;
 import br.edu.ifam.buscamed.interfaces.VendaAPI;
@@ -35,8 +40,10 @@ public class CadastroPedido extends AppCompatActivity {
     private VendaAPI vendaAPI;
     private EditText nome, telefone, remedio, quantidade;
     private Spinner situacao;
-    private Long idUser, idremedio;
+    private Long idUser, idremedio, idVenda;
     private int quantoTem;
+    private String nomeR, telefoneU, cliente;
+    private ImageButton pedir, cancelar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,32 +54,76 @@ public class CadastroPedido extends AppCompatActivity {
         acessarAPI();
 
         SharedPreferences userI = getSharedPreferences("user", MODE_PRIVATE);
-
+        SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
         idremedio = getIntent().getLongExtra("idRemedio", 0);
         idUser = userI.getLong("IDUser", 0);
-
+        idVenda = getIntent().getLongExtra("idVenda", 0);
         nome = findViewById(R.id.etNomePedido);
         telefone = findViewById(R.id.etTelefonePedido);
         remedio = findViewById(R.id.etRemedioPedido);
         quantidade = findViewById(R.id.etQuantidadePedido);
         situacao = findViewById(R.id.spSituacaoPedido);
+        pedir = findViewById(R.id.ibPedirRemedio);
+        cancelar = findViewById(R.id.ibCancelarPedido);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.situacoes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         situacao.setAdapter(adapter);
+        situacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String itemSelecionado = parent.getItemAtPosition(position).toString();
 
-        inicia(idremedio, idUser);
+                if (preferences.getString("userType", "").equals("user")) {
+                    situacao.setEnabled(false);
+                } else {
+                    situacao.setEnabled(true);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        //se é usuário
+        if(preferences.getString("userType", "").equals("user")){
+            if(idUser != 0 && idremedio!=0){//e veio pelo detalhe de remédio
+                inicia(idremedio, idUser);
+                cancelar.setVisibility(View.INVISIBLE);
+                pedir.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pedir();
+                    }
+                });
+            }else{//veio pelo meus pedidos
+                pedir.setVisibility(View.INVISIBLE);
+                iniciaPeloAdapter();
+            }
+        }else{
+            iniciaPeloAdapter();
+            cancelar.setVisibility(View.INVISIBLE);
+            pedir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alterarPedidoFarmacia();
+                }
+            });
+        }
+
     }
 
     public VendaInputDTO getVendaDTO(){
         VendaInputDTO vendaDTO = new VendaInputDTO();
         vendaDTO.setQuantidade(Integer.parseInt(quantidade.getText().toString()));
         vendaDTO.setRemedioId(idremedio);
-        vendaDTO.setConcluida("Em andamento");
+        vendaDTO.setConcluida("Realizado");
         vendaDTO.setUsuarioId(idUser);
         return vendaDTO;
     }
+
 
     private void acessarAPI() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -136,7 +187,7 @@ public class CadastroPedido extends AppCompatActivity {
         getRemedio(idremedio);
     }
 
-    public void pedir(View v){
+    public void pedir(){
         if(quantidade.getText().toString().equals("")){
             Toast.makeText(getApplicationContext(), "Informe a quantidade", Toast.LENGTH_LONG).show();
             quantidade.requestFocus();
@@ -180,6 +231,79 @@ public class CadastroPedido extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+
+    private void iniciaPeloAdapter(){
+        nome.setText("Feito por:"+getIntent().getStringExtra("cliente"));
+        telefone.setText("De telefone:"+getIntent().getStringExtra("telefone"));
+        remedio.setText(getIntent().getStringExtra("nomeRemedio"));
+        quantidade.setText(getIntent().getStringExtra("quantidade"));
+
+        nome.setEnabled(false);
+        telefone.setEnabled(false);
+        remedio.setEnabled(false);
+        quantidade.setEnabled(false);
+        nome.setBackground(null);
+        telefone.setBackground(null);
+        remedio.setBackground(null);
+        quantidade.setBackground(null);
+    }
+
+    public void cancelarPedido(View v){
+        getVenda(idVenda);
+        alterarPedido("Cancelado", getVendaDTO());
+    }
+
+    public void alterarPedidoFarmacia(){
+        getVenda(idVenda);
+        alterarPedido(situacao.getSelectedItem().toString(), getVendaDTO());
+    }
+
+    private void alterarPedido(String situacao, VendaInputDTO venda){
+        venda.setConcluida(situacao);
+
+        Call<VendaOutputDTO> call = vendaAPI.updateVenda(idVenda, venda);
+        call.enqueue(new Callback<VendaOutputDTO>() {
+            @Override
+            public void onResponse(Call<VendaOutputDTO> call, Response<VendaOutputDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    Toast.makeText(getApplicationContext(),"Pedido alterado", Toast.LENGTH_SHORT).show();
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VendaOutputDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getVenda(Long id){
+        Call<VendaInputDTO> call = vendaAPI.getVendaById(id);
+        call.enqueue(new Callback<VendaInputDTO>() {
+            @Override
+            public void onResponse(Call<VendaInputDTO> call, Response<VendaInputDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                   idremedio = response.body().getRemedioId();
+                   idUser = response.body().getUsuarioId();
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VendaInputDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 }
