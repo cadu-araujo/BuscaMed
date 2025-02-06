@@ -84,10 +84,12 @@ public class MenuFarmacia extends AppCompatActivity {
     public void home(View v){
         new AlertDialog.Builder(this).setTitle("Confirmação").setMessage("Tem certeza que deseja voltar ao Login?")
                 .setPositiveButton("Sim", (dialog, which) -> {
+
                     SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
+
                     Intent i = new Intent(this, MainActivity.class);
                     startActivity(i);
                     Toast.makeText(this, "De volta ao login!", Toast.LENGTH_SHORT).show();

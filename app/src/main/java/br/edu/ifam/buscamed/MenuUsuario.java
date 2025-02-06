@@ -75,8 +75,13 @@ public class MenuUsuario extends AppCompatActivity {
 
                     SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
+                    SharedPreferences userI = getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor2 = userI.edit();
+                    editor2.clear();
                     editor.clear();
                     editor.apply();
+                    editor2.apply();
+
                     Intent i = new Intent(this, MainActivity.class);
                     startActivity(i);
                     Toast.makeText(this, "De volta ao login!", Toast.LENGTH_SHORT).show();

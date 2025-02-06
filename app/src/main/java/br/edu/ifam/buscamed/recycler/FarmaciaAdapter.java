@@ -38,13 +38,14 @@ public class FarmaciaAdapter extends RecyclerView.Adapter<FarmaciaAdapter.Farmac
         holder.tvNomeF.setText(farmacia.getNome());
         holder.tvCNPJ.setText(farmacia.getCnpj());
         holder.tvEndereco.setText(farmacia.getEndereco());
+        holder.tvTelefone.setText(farmacia.getTelefone());
 
-        /*holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CadastroFarmacia.class);
             intent.putExtra("id", farmacia.getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-        });*/
+        });
     }
 
     @Override
@@ -56,12 +57,14 @@ public class FarmaciaAdapter extends RecyclerView.Adapter<FarmaciaAdapter.Farmac
         TextView tvNomeF;
         TextView tvCNPJ;
         TextView tvEndereco;
+        TextView tvTelefone;
 
         public FarmaciaViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNomeF = itemView.findViewById(R.id.tvNomeF);
             tvCNPJ = itemView.findViewById(R.id.tvCNPJ);
             tvEndereco = itemView.findViewById(R.id.tvEndereco);
+            tvTelefone = itemView.findViewById(R.id.tvTelefone);
         }
     }
 }

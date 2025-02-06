@@ -9,6 +9,8 @@ public class FarmaciaDTO {
     private String email;
     private String endereco;
     private Long login;
+    private String telefone;
+
     public FarmaciaDTO() {}
 
     public FarmaciaDTO(Farmacia farmacia) {
@@ -18,6 +20,7 @@ public class FarmaciaDTO {
         this.email = farmacia.getEmail();
         this.nome = farmacia.getNome();
         this.login = farmacia.getLogin();
+        this.telefone = farmacia.getTelefone();
     }
 
     public String getCnpj() {
@@ -38,6 +41,14 @@ public class FarmaciaDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public void setId(Long id) {
@@ -69,6 +80,6 @@ public class FarmaciaDTO {
     }
 
     public Farmacia getFarmacia(){
-        return new Farmacia(cnpj, endereco, email, id, nome, login);
+        return new Farmacia(telefone, cnpj, endereco, email, id, nome, login);
     }
 }

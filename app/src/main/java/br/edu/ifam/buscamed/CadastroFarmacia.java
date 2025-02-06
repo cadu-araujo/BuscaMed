@@ -5,6 +5,7 @@ import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -34,10 +35,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CadastroFarmacia extends AppCompatActivity {
 
-    private EditText etFarmaciaNome, etFarmaciaCNPJ, etFarmaciaEndereco;
+    private EditText etFarmaciaNome, etFarmaciaCNPJ, etFarmaciaEndereco, etFarmaciaTelefone;
     private long id, idFarmacia;
     private FarmaciaDAO farmaciaDAO;
-    private ImageButton ibSaveFarmacia, ibDeleteFarmacia;
+    private ImageButton ibSaveFarmacia, ibDeleteFarmacia, ibZap, clear;
     private FarmaciaAPI farmaciaAPI;
     private TextView titulo;
 
@@ -54,15 +55,42 @@ public class CadastroFarmacia extends AppCompatActivity {
         etFarmaciaNome = findViewById(R.id.etFarmaciaNome);
         etFarmaciaCNPJ = findViewById(R.id.etFarmaciaCNPJ);
         etFarmaciaEndereco = findViewById(R.id.etFarmaciaEndereco);
+        etFarmaciaTelefone = findViewById(R.id.etFarmaciaTelefone);
         ibSaveFarmacia = findViewById(R.id.ibSaveFarmacia);
         ibDeleteFarmacia = findViewById(R.id.ibExcluirFarmacia);
+        clear = findViewById(R.id.ibLimparFarmacia);
+        ibZap = findViewById(R.id.ibZapFarmacia);
 
-        Intent intent = getIntent();
+        SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
+        if(!preferences.getString("userType", "").equals("user")) {
+            ibZap.setVisibility(View.INVISIBLE);
+            id = getIntent().getLongExtra("id", 0);
+            getFarmacia(id);
+        }else{
+            clear.setVisibility(View.INVISIBLE);
+            ibSaveFarmacia.setVisibility(View.INVISIBLE);
+            ibDeleteFarmacia.setVisibility(View.INVISIBLE);
+
+            titulo.setText("Detalhes da Farmácia");
+            id = getIntent().getLongExtra("id", 0);
+            getFarmaciaID(id);
+
+            /*etFarmaciaNome.setEnabled(false);
+            etFarmaciaTelefone.setEnabled(false);
+            etFarmaciaEndereco.setEnabled(false);
+            etFarmaciaCNPJ.setEnabled(false);
+            etFarmaciaNome.setBackground(null);
+            etFarmaciaTelefone.setBackground(null);
+            etFarmaciaEndereco.setBackground(null);
+            etFarmaciaCNPJ.setBackground(null);*/
+        }
+
+        /*Intent intent = getIntent();
         if(intent.hasExtra("id")){
             titulo.setText("Edição de Farmácia");
             id = intent.getLongExtra("id", 0);
             getFarmacia(id);
-        }
+        }*/
 
     }
 
@@ -71,6 +99,7 @@ public class CadastroFarmacia extends AppCompatActivity {
         farmacia.setNome(etFarmaciaNome.getText().toString());
         farmacia.setCnpj(etFarmaciaCNPJ.getText().toString());
         farmacia.setEndereco(etFarmaciaEndereco.getText().toString());
+        farmacia.setTelefone(etFarmaciaTelefone.getText().toString());
         return farmacia;
     }
 
@@ -78,6 +107,7 @@ public class CadastroFarmacia extends AppCompatActivity {
         etFarmaciaNome.setText(farmacia.getNome());
         etFarmaciaCNPJ.setText(farmacia.getCnpj());
         etFarmaciaEndereco.setText(farmacia.getEndereco());
+        etFarmaciaTelefone.setText(farmacia.getTelefone());
     }
 
     public void ibDeleteFarmaciaOnClick(View v){
@@ -120,6 +150,28 @@ public class CadastroFarmacia extends AppCompatActivity {
                 if(response.isSuccessful() && response.body()!=null){
                    setFarmacia(response.body().getFarmacia());
                    idFarmacia = response.body().getFarmacia().getId();
+                }else{
+                    String codigo = "Erro: "+response.code();
+                    Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FarmaciaDTO> call, Throwable t) {
+                String failureMessage = "Falha de acesso"+t.getMessage();
+                Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getFarmaciaID(Long id) {
+        Call<FarmaciaDTO> call = farmaciaAPI.getFarmacia(id);
+        call.enqueue(new Callback<FarmaciaDTO>() {
+            @Override
+            public void onResponse(Call<FarmaciaDTO> call, Response<FarmaciaDTO> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    setFarmacia(response.body().getFarmacia());
+                    idFarmacia = response.body().getFarmacia().getId();
                 }else{
                     String codigo = "Erro: "+response.code();
                     Toast.makeText(getApplicationContext(), codigo, Toast.LENGTH_SHORT).show();
@@ -178,6 +230,13 @@ public class CadastroFarmacia extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), failureMessage, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void chamarNoZap(View v){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://wa.me/" + etFarmaciaTelefone.getText().toString()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 

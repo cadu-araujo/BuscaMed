@@ -1,16 +1,14 @@
 package br.edu.ifam.buscamed.model;
 
 public class Farmacia {
-    private Long id;
-    private String nome;
-    private String cnpj;
-    private String endereco;
-    private String email;
-    private Long login;
+    private Long id,login;
+    private String nome, cnpj, endereco, email, telefone;
+
 
     public Farmacia() {}
 
-    public Farmacia(String cnpj, String endereco, String email, Long id, String nome, Long login) {
+    public Farmacia(String telefone, String cnpj, String endereco, String email, Long id, String nome, Long login) {
+        this.telefone = telefone;
         this.cnpj = cnpj;
         this.endereco = endereco;
         this.email = email;
@@ -65,5 +63,13 @@ public class Farmacia {
 
     public void setLogin(Long login) {
         this.login = login;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

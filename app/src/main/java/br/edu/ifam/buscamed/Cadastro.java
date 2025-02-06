@@ -124,6 +124,7 @@ public class Cadastro extends AppCompatActivity {
         farmacia.setEndereco(etFarmaciaEndereco.getText().toString());
         farmacia.setEmail(etFarmaciaEmail.getText().toString());
         farmacia.setCnpj(etFarmaciaCNPJ.getText().toString());
+        farmacia.setTelefone(etFarmaciaTelefone.getText().toString());
         farmacia.setLogin(loginId);
         return farmacia;
     }

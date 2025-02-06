@@ -39,4 +39,4 @@ public class Verifica extends AppCompatActivity {
         finish();
     }
 
-    }
+}
