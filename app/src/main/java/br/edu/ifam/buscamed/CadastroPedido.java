@@ -3,7 +3,9 @@ package br.edu.ifam.buscamed;
 import static br.edu.ifam.buscamed.repository.BDbuscaMed.API_URL;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -43,7 +45,7 @@ public class CadastroPedido extends AppCompatActivity {
     private Long idUser, idremedio, idVenda;
     private int quantoTem;
     private String nomeR, telefoneU, cliente;
-    private ImageButton pedir, cancelar;
+    private ImageButton pedir, cancelar, zap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class CadastroPedido extends AppCompatActivity {
         situacao = findViewById(R.id.spSituacaoPedido);
         pedir = findViewById(R.id.ibPedirRemedio);
         cancelar = findViewById(R.id.ibCancelarPedido);
+        zap = findViewById(R.id.ibZap);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.situacoes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -91,6 +94,7 @@ public class CadastroPedido extends AppCompatActivity {
         if(preferences.getString("userType", "").equals("user")){
             if(idUser != 0 && idremedio!=0){//e veio pelo detalhe de remédio
                 inicia(idremedio, idUser);
+                zap.setVisibility(View.INVISIBLE);
                 cancelar.setVisibility(View.INVISIBLE);
                 pedir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -99,6 +103,7 @@ public class CadastroPedido extends AppCompatActivity {
                     }
                 });
             }else{//veio pelo meus pedidos
+                zap.setVisibility(View.INVISIBLE);
                 pedir.setVisibility(View.INVISIBLE);
                 iniciaPeloAdapter();
             }
@@ -239,6 +244,7 @@ public class CadastroPedido extends AppCompatActivity {
         telefone.setText("De telefone:"+getIntent().getStringExtra("telefone"));
         remedio.setText(getIntent().getStringExtra("nomeRemedio"));
         quantidade.setText(getIntent().getStringExtra("quantidade"));
+        situacao.setSelection(getIndex(situacao, getIntent().getStringExtra("situacao")));
 
         nome.setEnabled(false);
         telefone.setEnabled(false);
@@ -306,4 +312,20 @@ public class CadastroPedido extends AppCompatActivity {
 
     }
 
+    private int getIndex(Spinner spinner, String myString) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void chamarNoZap(View v){
+        String telefone = getIntent().getStringExtra("telefone");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://wa.me/" + telefone));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 }
