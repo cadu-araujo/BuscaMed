@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">BuscaMed</string>
     <string-array name="situacoes">
-        <item>Concluído</item>
+        <item>Realizado</item>
+        <item>Aceito</item>
         <item>Não aceito</item>
-        <item>Em andamento</item>
+        <item>Cancelado</item>
+        <item>Concluído</item>
     </string-array>
 </resources>

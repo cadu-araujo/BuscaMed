@@ -13,7 +13,7 @@
         android:layout_width="100dp"
         android:layout_height="80dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="128dp"
+        android:layout_marginEnd="144dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/round_corners"
         android:backgroundTint="#00BF63"
@@ -30,7 +30,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="128dp"
+        android:layout_marginEnd="144dp"
         android:layout_marginBottom="50dp"
         android:text="Remédios"
         android:textAlignment="center"
@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/btCadastrarRemedio"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -124,9 +124,9 @@
 
     <ImageButton
         android:id="@+id/imageButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF9800"
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:backgroundTint="#23C82D"
         android:onClick="meusPedidos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

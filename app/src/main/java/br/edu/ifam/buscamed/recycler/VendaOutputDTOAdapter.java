@@ -45,6 +45,13 @@ public class VendaOutputDTOAdapter extends RecyclerView.Adapter<VendaOutputDTOAd
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, CadastroPedido.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("nomeRemedio", vendaOutputDTO.getRemedio());
+            intent.putExtra("quantidade", String.valueOf(vendaOutputDTO.getQuantidade()));
+            intent.putExtra("telefone", vendaOutputDTO.getTelefone());
+            intent.putExtra("cliente", vendaOutputDTO.getUsuario());
+            intent.putExtra("nomeFarmacia", vendaOutputDTO.getFarmacia());
+            intent.putExtra("idVenda", vendaOutputDTO.getId());
+            intent.putExtra("situacao", vendaOutputDTO.getConcluida());
             context.startActivity(intent);
         });
     }
@@ -72,4 +79,6 @@ public class VendaOutputDTOAdapter extends RecyclerView.Adapter<VendaOutputDTOAd
             tvQuantidade = itemView.findViewById(R.id.tvItemQuantidade);
         }
     }
+
+
 }
