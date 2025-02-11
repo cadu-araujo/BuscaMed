@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     Login log = response.body().getLogin();
 
                     Toast.makeText(getApplicationContext(), "Autenticado!", Toast.LENGTH_SHORT).show();
+
                     SharedPreferences preferences = getSharedPreferences("login_prefs", MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("isLoggedIn", true);

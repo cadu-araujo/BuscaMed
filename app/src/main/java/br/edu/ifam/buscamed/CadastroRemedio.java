@@ -85,7 +85,6 @@ public class CadastroRemedio extends AppCompatActivity {
             comprar.setVisibility(View.VISIBLE);
             titulo.setText("Detalhes do remédio");
         } else if(!preferences.getString("userType", "").equals("user") && intent.hasExtra("nomeFarmacia")){
-            ibDeleteRemedio.setVisibility(View.VISIBLE);
             ibSaveRemedio.setVisibility(View.VISIBLE);
             etRemedioFarmacia.setText(intent.getStringExtra("nomeFarmacia"));
             ibSaveRemedio.setOnClickListener(new View.OnClickListener() {
