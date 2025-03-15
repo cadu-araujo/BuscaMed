@@ -27,17 +27,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerBuscaFarmacia"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="308dp"
+        android:layout_marginBottom="100dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btPesquisarFarmacia"
-        app:layout_constraintVertical_bias="0.363" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageButton
         android:id="@+id/ibSearchFarmacia"
